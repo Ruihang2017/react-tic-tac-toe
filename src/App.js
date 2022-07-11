@@ -149,16 +149,35 @@ export class Game extends React.Component {
     console.log(this.state.history);
   }
 
+  jumpTo(index) {
+    // console.log('Inside of the jump to function: ' + index);
+    // console.log(this.state.history);
+    // console.log(this.state.history.slice(0, index));
+    this.setState({
+      history: this.state.history.slice(0, index),
+    });
+  }
+
+  // the render function
   render() {
+    // init
     const history = this.state.history;
     const current = history[history.length - 1];
     const winner = calculateWinner(current.squares);
 
-    const moves = history.map((step, move) => {
-      const desc = move ? 'Go to move #' + move : 'Go to the game start';
+    // map the moves
+    const moves = history.map((step, index) => {
+      const desc = index ? 'Go to move #' + index : 'Go to the game start';
+
+      // console.log("length is: ", history.length)
+      // console.log("the index is: ", index)
+      if ((index+1) >= history.length ){return}
+
       return (
         <li>
-          <button onClick={() => this.jumpTo(move)}> {desc} </button>
+          <button step={step} onClick={() => this.jumpTo(index+1)}>
+            {desc}
+          </button>
         </li>
       );
     });
@@ -183,7 +202,7 @@ export class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
-          <ol>{moves}</ol>
+          <ul>{moves}</ul>
         </div>
       </div>
     );
