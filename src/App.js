@@ -91,6 +91,44 @@ export class Board extends React.Component {
   }
 }
 
+export class UserForm extends React.Component{
+  constructor(props){
+    super(props)
+    this.state = {
+      player1Name: null,
+      player2Name: null,
+    }
+  }
+  playerUserInput(event){
+    console.log(event)
+  }
+
+  render(){
+    return(
+      <form className="userForm">
+        <label className="Userlabel">
+          Player 1:
+          <input
+            className="UserInput"
+            type="text"
+            name="Player1Name"
+            onChange = {()=>this.playerUserInput()}
+            value = {this.state.player1Name}
+          ></input>
+        </label>
+        <label className="Userlabel">
+          Player 2:
+          <input
+            className="UserInput"
+            type="text"
+            name="Player1Name"
+          ></input>
+        </label>
+      </form>
+    )
+  }
+}
+
 export class Game extends React.Component {
   constructor(props) {
     super(props);
@@ -115,7 +153,6 @@ export class Game extends React.Component {
       0,
       this.state.history.length - 1
     );
-    console.log(reducedHistory);
     this.setState({
       history: reducedHistory,
       oddClick: !this.state.oddClick,
@@ -124,17 +161,19 @@ export class Game extends React.Component {
 
   // Handle a click on square
   handleCLick(i) {
-    // console.log("**theSquares: " + i)
-
     const history = this.state.history;
     const current = history[history.length - 1];
     const theSquares = current.squares.slice();
 
     // prevent editing the square after occupied or game finsih
-    if (calculateWinner(theSquares) || theSquares[i]) {
+    if (calculateWinner(theSquares)) {
+      window.alert('Game finsihed!');
       return;
     }
-
+    if (theSquares[i]) {
+      window.alert('This grid has been ocuppied.');
+      return;
+    }
     theSquares[i] = this.state.oddClick ? 'X' : 'O';
 
     this.setState({
@@ -145,14 +184,9 @@ export class Game extends React.Component {
       ]),
       oddClick: !this.state.oddClick,
     });
-
-    console.log(this.state.history);
   }
 
   jumpTo(index) {
-    // console.log('Inside of the jump to function: ' + index);
-    // console.log(this.state.history);
-    // console.log(this.state.history.slice(0, index));
     this.setState({
       history: this.state.history.slice(0, index),
     });
@@ -168,14 +202,12 @@ export class Game extends React.Component {
     // map the moves
     const moves = history.map((step, index) => {
       const desc = index ? 'Go to move #' + index : 'Go to the game start';
-
-      // console.log("length is: ", history.length)
-      // console.log("the index is: ", index)
-      if ((index+1) >= history.length ){return}
-
+      if (index + 1 >= history.length) {
+        return;
+      }
       return (
-        <li>
-          <button step={step} onClick={() => this.jumpTo(index+1)}>
+        <li key={index}>
+          <button step={step} onClick={() => this.jumpTo(index + 1)}>
             {desc}
           </button>
         </li>
@@ -189,20 +221,25 @@ export class Game extends React.Component {
     } else {
       status =
         'Next player: ' +
-        (this.props.oddClick ? 'First Player' : 'Second Player');
+        (this.state.oddClick ? 'First Player' : 'Second Player');
     }
     return (
-      <div className="game">
-        <div className="game-board">
-          <Board
-            squares={current.squares}
-            onClick={(i) => this.handleCLick(i)}
-            onButtonCLick={() => this.handleButtonClick()}
-          />
+      <div>
+        <div className="userBlock">
+          <UserForm/>
         </div>
-        <div className="game-info">
-          <div>{status}</div>
-          <ul>{moves}</ul>
+        <div className="game">
+          <div className="game-board">
+            <Board
+              squares={current.squares}
+              onClick={(i) => this.handleCLick(i)}
+              onButtonCLick={() => this.handleButtonClick()}
+            />
+          </div>
+          <div className="game-info">
+            <div>{status}</div>
+            <ul>{moves}</ul>
+          </div>
         </div>
       </div>
     );
@@ -210,7 +247,6 @@ export class Game extends React.Component {
 }
 
 function calculateWinner(squares) {
-  // console.log("Calculating the winner")
   const lines = [
     [0, 1, 2],
     [3, 4, 5],

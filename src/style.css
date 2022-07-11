@@ -35,16 +35,17 @@ p {
   margin-left: 20px;
 }
 
-ol, ul {
+ol,
+ul {
   padding-left: 30px;
 }
 
 body {
-  font: 14px "Century Gothic", Futura, sans-serif;
+  font: 14px 'Century Gothic', Futura, sans-serif;
   margin: 20px;
 }
 
-.SimpleButton{
+.SimpleButton {
   padding: 0px;
   background: rgb(168, 221, 179);
   border: 2px solid rgb(6, 245, 58);
@@ -52,4 +53,20 @@ body {
   float: left;
   height: 20px;
   width: 120px;
+}
+
+.userBlock {
+  padding: 5px;
+}
+.userForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.Userlabel {
+  padding: 2px 0px 2px 0px;
+}
+
+.UserInput {
+  margin-left: 10px;
 }
