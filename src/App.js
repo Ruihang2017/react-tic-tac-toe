@@ -91,41 +91,49 @@ export class Board extends React.Component {
   }
 }
 
-export class UserForm extends React.Component{
-  constructor(props){
-    super(props)
+export class UserForm extends React.Component {
+  constructor(props) {
+    super(props);
     this.state = {
-      player1Name: null,
-      player2Name: null,
-    }
+      player1Name: '',
+      player2Name: '',
+    };
+    // this.handleChange = this.handleChange.bind(this);
   }
-  playerUserInput(event){
-    console.log(event)
+  player1UserInput(event) {
+    this.setState({ player1Name: event.target.value });
+    console.log('Player 1: ' + event.target.value);
+  }
+  player2UserInput(event) {
+    this.setState({ player2Name: event.target.value });
+    console.log('Player 2: ' + event.target.value);
   }
 
-  render(){
-    return(
+  render() {
+    return (
       <form className="userForm">
         <label className="Userlabel">
           Player 1:
           <input
             className="UserInput"
             type="text"
-            name="Player1Name"
-            onChange = {()=>this.playerUserInput()}
-            value = {this.state.player1Name}
-          ></input>
+            name="player1Name"
+            value={this.state.value}
+            onChange={(event) => this.props.onChange(event)}
+          />
         </label>
         <label className="Userlabel">
           Player 2:
           <input
             className="UserInput"
             type="text"
-            name="Player1Name"
-          ></input>
+            name="player2Name"
+            value={this.state.value}
+            onChange={(event) => this.props.onChange(event)}
+          />
         </label>
       </form>
-    )
+    );
   }
 }
 
@@ -139,6 +147,8 @@ export class Game extends React.Component {
         },
       ],
       oddClick: true,
+      player1Name: '',
+      player2Name: '',
     };
   }
 
@@ -192,6 +202,12 @@ export class Game extends React.Component {
     });
   }
 
+  onUserNameChange(event) {
+    let theEvent = {};
+    theEvent[event.target.name] = event.target.value;
+    this.setState(theEvent);
+  }
+
   // the render function
   render() {
     // init
@@ -221,12 +237,12 @@ export class Game extends React.Component {
     } else {
       status =
         'Next player: ' +
-        (this.state.oddClick ? 'First Player' : 'Second Player');
+        (this.state.oddClick ? this.state.player1Name : this.state.player2Name);
     }
     return (
       <div>
         <div className="userBlock">
-          <UserForm/>
+          <UserForm onChange={(event) => this.onUserNameChange(event)} />
         </div>
         <div className="game">
           <div className="game-board">
