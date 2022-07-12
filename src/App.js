@@ -240,10 +240,8 @@ export class Game extends React.Component {
         (this.state.oddClick ? this.state.player1Name : this.state.player2Name);
     }
     return (
-      <div>
-        <div className="userBlock">
-          <UserForm onChange={(event) => this.onUserNameChange(event)} />
-        </div>
+      <div className = "contentBlock">
+        <UserForm onChange={(event) => this.onUserNameChange(event)} />
         <div className="game">
           <div className="game-board">
             <Board
